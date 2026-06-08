@@ -10,6 +10,44 @@ function clean(value: FormDataEntryValue | null, max = 200): string {
   return String(value ?? "").trim().slice(0, max);
 }
 
+const TABLE_EDITOR =
+  "https://supabase.com/dashboard/project/lnqyireyosrxrrwpuaqj/editor";
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
+ * Sends an admin alert email via Resend. Never throws — a notification
+ * failure must never break a resident's submission.
+ */
+async function notifyAdmin(subject: string, bodyHtml: string): Promise<void> {
+  const key = process.env.RESEND_API_KEY;
+  const to = process.env.NOTIFY_EMAIL;
+  const from = process.env.NOTIFY_FROM ?? "Level With Respect <onboarding@resend.dev>";
+  if (!key || !to) return;
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject,
+        html: bodyHtml,
+      }),
+    });
+  } catch {
+    // swallow — submission already succeeded
+  }
+}
+
 export async function submitPetitionInterest(
   formData: FormData
 ): Promise<ActionResult> {
@@ -50,6 +88,15 @@ export async function submitPetitionInterest(
     }
     return { ok: false, message: "Something went wrong. Please try again." };
   }
+
+  await notifyAdmin(
+    `New petition signup — ${firstName} ${lastName}`,
+    `<h2>New petition signup</h2>
+     <p><strong>Name:</strong> ${escapeHtml(`${firstName} ${lastName}`)}</p>
+     <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+     <p><strong>Street:</strong> ${escapeHtml(streetName)}</p>
+     <p style="color:#8a8174">View all signups in the <a href="${TABLE_EDITOR}">Supabase table</a>.</p>`
+  );
 
   return {
     ok: true,
@@ -135,6 +182,17 @@ export async function submitStory(formData: FormData): Promise<ActionResult> {
     return { ok: false, message: "Something went wrong. Please try again." };
   }
 
+  await notifyAdmin(
+    "New community story submitted (pending review)",
+    `<h2>New community story — needs review</h2>
+     <p><strong>From:</strong> ${escapeHtml(isAnonymous ? "Anonymous" : displayName || "A resident")}</p>
+     ${occurredOn ? `<p><strong>Date:</strong> ${escapeHtml(occurredOn)}</p>` : ""}
+     ${contactEmail ? `<p><strong>Contact (private):</strong> ${escapeHtml(contactEmail)}</p>` : ""}
+     ${mediaUrls.length ? `<p><strong>Attachments:</strong> ${mediaUrls.length}</p>` : ""}
+     <blockquote style="border-left:3px solid #b4532a;padding-left:12px;color:#4a443c">${escapeHtml(body)}</blockquote>
+     <p>Set status to <strong>approved</strong> in the <a href="${TABLE_EDITOR}">Supabase stories table</a> to publish.</p>`
+  );
+
   return {
     ok: true,
     message:
@@ -187,6 +245,18 @@ export async function submitReport(formData: FormData): Promise<ActionResult> {
   if (error) {
     return { ok: false, message: "Something went wrong. Please try again." };
   }
+
+  await notifyAdmin(
+    `New issue report submitted — ${title}`,
+    `<h2>New issue report — needs review</h2>
+     <p><strong>Category:</strong> ${escapeHtml(category)}</p>
+     <p><strong>Title:</strong> ${escapeHtml(title)}</p>
+     ${occurredOn ? `<p><strong>Date:</strong> ${escapeHtml(occurredOn)}</p>` : ""}
+     ${contactEmail ? `<p><strong>Contact (private):</strong> ${escapeHtml(contactEmail)}</p>` : ""}
+     ${mediaUrls.length ? `<p><strong>Attachments:</strong> ${mediaUrls.length}</p>` : ""}
+     ${body ? `<blockquote style="border-left:3px solid #b4532a;padding-left:12px;color:#4a443c">${escapeHtml(body)}</blockquote>` : ""}
+     <p>Set status to <strong>approved</strong> in the <a href="${TABLE_EDITOR}">Supabase reports table</a> to publish.</p>`
+  );
 
   return {
     ok: true,
