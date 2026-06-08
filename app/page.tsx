@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title:
     "Level With Respect — Residents for a Good Neighbor on Pico Boulevard",
   description:
-    "Residents near LEVEL Venue at 9320 W Pico Blvd, Los Angeles want the venue to succeed — and the neighborhood to thrive alongside it. Join local residents seeking responsible operation.",
+    "Residents near LEVEL Venue — the event venue at 9320 W Pico Blvd in Pico-Robertson, Los Angeles, CA 90035 — want it to succeed and the neighborhood to thrive alongside it. Join local residents seeking responsible operation.",
   alternates: { canonical: "/" },
 };
 
@@ -20,7 +20,7 @@ const LOVE = [
   {
     icon: Heart,
     title: "Beautiful Space",
-    body: "A thoughtfully designed venue that contributes positively to Pico Boulevard.",
+    body: "A thoughtfully designed event venue that contributes positively to Pico Boulevard.",
   },
   {
     icon: Building2,
@@ -68,7 +68,7 @@ const ASKS = [
 export default function HomePage() {
   return (
     <>
-      {/* ——— Hero ——— */}
+      {/* Hero */}
       <section className="relative overflow-hidden">
         <div
           aria-hidden="true"
@@ -77,7 +77,7 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-16 md:px-8 md:pt-24">
           <Reveal>
             <p className="text-xs font-medium uppercase tracking-[0.25em] text-clay-deep">
-              9320 W Pico Blvd · Los Angeles
+              9320 W Pico Blvd · Los Angeles, CA 90035
             </p>
             <h1 className="mt-5 max-w-3xl font-display text-5xl leading-[1.04] tracking-tight text-ink md:text-7xl">
               Level With Respect
@@ -90,8 +90,9 @@ export default function HomePage() {
           <Reveal delay={0.15}>
             <div className="mt-8 max-w-2xl space-y-4 text-lg leading-relaxed text-ink-soft">
               <p>
-                LEVEL Venue has brought a striking event space to 9320 W Pico
-                Blvd. Residents are not asking it to disappear.
+                LEVEL Venue has brought a striking event venue to 9320 W Pico
+                Blvd in Pico-Robertson. Residents are not asking it to
+                disappear.
               </p>
               <p>
                 We are asking it to coexist responsibly with the neighborhood
@@ -100,7 +101,7 @@ export default function HomePage() {
             </div>
           </Reveal>
 
-          {/* ——— Primary call to action ——— */}
+          {/* Primary call to action */}
           <Reveal delay={0.3}>
             <div className="mt-10 max-w-2xl rounded-2xl border border-line bg-white/50 p-7 shadow-card md:p-9">
               <div className="space-y-3">
@@ -128,7 +129,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ——— What We Love ——— */}
+      {/* What We Love */}
       <section className="border-t border-line bg-cream">
         <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
           <Reveal>
@@ -157,7 +158,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ——— What Needs Improvement ——— */}
+      {/* What Needs Improvement */}
       <section className="border-t border-line">
         <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
           <Reveal>
@@ -192,7 +193,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ——— The Ask ——— */}
+      {/* The Ask */}
       <section className="border-t border-line bg-ink text-bone">
         <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
           <div className="grid gap-12 md:grid-cols-2 md:gap-16">
@@ -232,7 +233,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ——— Closing CTA ——— */}
+      {/* Closing CTA */}
       <section className="border-t border-line bg-cream">
         <div className="mx-auto max-w-6xl px-5 py-20 text-center md:px-8 md:py-28">
           <Reveal>
