@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Level With Respect — Design Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bone:#faf7f2; --cream:#f3eee5; --sand:#e9e2d4; --line:#e2dacb;
+    --ink:#211d18; --ink-soft:#4a443c; --mute:#8a8174;
+    --clay:#b4532a; --clay-deep:#8a3d1f; --moss:#5a6b52;
+    --shadow-card:0 1px 2px rgb(33 29 24 / .04), 0 8px 24px rgb(33 29 24 / .06);
+    --shadow-lift:0 2px 4px rgb(33 29 24 / .06), 0 16px 40px rgb(33 29 24 / .1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bone);color:var(--ink);font-family:"Instrument Sans","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--clay);color:var(--bone)}
+  .display{font-family:"Fraunces",Georgia,serif}
+  .wrap{max-width:72rem;margin:0 auto;padding:0 1.25rem}
+  @media(min-width:768px){.wrap{padding:0 2rem}}
+  a{color:inherit;text-decoration:none}
+
+  /* preview badge */
+  .badge{position:fixed;bottom:1rem;right:1rem;z-index:60;background:var(--ink);color:var(--bone);font-size:.72rem;letter-spacing:.08em;padding:.5rem .85rem;border-radius:999px;opacity:.85}
+
+  /* header */
+  header.site{position:sticky;top:0;z-index:40;border-bottom:1px solid rgb(226 218 203 / .7);background:rgb(250 247 242 / .85);backdrop-filter:blur(8px)}
+  .nav{display:flex;height:4rem;align-items:center;justify-content:space-between}
+  .wordmark{font-family:"Fraunces",serif;font-size:1.125rem;letter-spacing:-.01em}
+  .wordmark em{color:var(--clay-deep)}
+  .links{display:none;align-items:center;gap:1.75rem}
+  @media(min-width:768px){.links{display:flex}}
+  .links a{font-size:.875rem;letter-spacing:.02em;color:var(--ink-soft);transition:color .2s}
+  .links a:hover{color:var(--ink)}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:none;border-radius:999px;font-family:inherit;font-weight:500;letter-spacing:.02em;cursor:pointer;transition:all .3s;text-align:center}
+  .btn-accent{background:var(--clay);color:var(--bone);box-shadow:var(--shadow-card)}
+  .btn-accent:hover{background:var(--clay-deep);box-shadow:var(--shadow-lift)}
+  .btn-outline{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .btn-outline:hover{border-color:var(--ink);background:var(--cream)}
+  .btn-sm{height:2.25rem;padding:0 1rem;font-size:.875rem}
+  .btn-lg{height:3.5rem;padding:0 2.25rem;font-size:1rem}
+  .btn-xl{height:4rem;padding:0 3rem;font-size:1.125rem}
+
+  /* sections */
+  section.band{border-top:1px solid var(--line)}
+  .pad{padding-top:5rem;padding-bottom:5rem}
+  @media(min-width:768px){.pad{padding-top:7rem;padding-bottom:7rem}}
+  .kicker{font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.25em;color:var(--clay-deep)}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden}
+  .hero-glow{position:absolute;inset:0 0 auto 0;height:34rem;background:radial-gradient(70% 60% at 50% 0%,#f0e6d6 0%,transparent 70%);pointer-events:none}
+  .hero-inner{position:relative;padding-top:4rem;padding-bottom:5rem}
+  @media(min-width:768px){.hero-inner{padding-top:6rem}}
+  h1{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(3rem,8vw,4.5rem);line-height:1.04;letter-spacing:-.02em;margin-top:1.25rem;max-width:48rem}
+  .sub{font-family:"Fraunces",serif;font-style:italic;font-size:clamp(1.5rem,4vw,1.875rem);line-height:1.35;color:var(--ink-soft);margin-top:1.5rem;max-width:42rem}
+  .lede{margin-top:2rem;max-width:42rem;font-size:1.125rem;line-height:1.65;color:var(--ink-soft)}
+  .lede p+p{margin-top:1rem}
+
+  /* CTA card */
+  .cta-card{margin-top:2.5rem;max-width:42rem;border:1px solid var(--line);background:rgb(255 255 255 / .5);border-radius:1rem;padding:2.25rem;box-shadow:var(--shadow-card)}
+  .cta-title{font-family:"Fraunces",serif;font-size:1.4rem;line-height:1.3}
+  .cta-note{margin-top:1rem;font-size:.875rem;line-height:1.6;color:var(--mute)}
+  .cta-card .btn{margin-top:1.5rem;width:100%}
+  @media(min-width:640px){.cta-card .btn{width:auto}}
+
+  /* cards */
+  h2.sec{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(1.875rem,4vw,2.25rem);line-height:1.2;margin-top:1rem;max-width:36rem}
+  .grid3{display:grid;gap:1.5rem;margin-top:3rem}
+  @media(min-width:768px){.grid3{grid-template-columns:repeat(3,1fr)}}
+  .grid2{display:grid;gap:1.5rem;margin-top:3rem}
+  @media(min-width:768px){.grid2{grid-template-columns:repeat(2,1fr)}}
+  .card{height:100%;border:1px solid var(--line);background:var(--bone);border-radius:1rem;padding:2rem;box-shadow:var(--shadow-card)}
+  .card h3{font-family:"Fraunces",serif;font-weight:500;font-size:1.25rem;margin-top:1.25rem}
+  .card p{margin-top:.75rem;font-size:.9375rem;line-height:1.65;color:var(--ink-soft)}
+  .card .glyph{width:1.5rem;height:1.5rem;stroke:var(--clay);fill:none;stroke-width:1.5}
+  .card.link{background:rgb(255 255 255 / .5);display:flex;flex-direction:column;transition:box-shadow .3s;cursor:pointer}
+  .card.link:hover{box-shadow:var(--shadow-lift)}
+  .card.link h3{margin-top:0}
+  .card.link p{flex:1}
+  .card .more{margin-top:1.25rem;font-size:.875rem;font-weight:500;color:var(--clay-deep)}
+
+  .bg-cream{background:var(--cream)}
+  .bg-cream .card{background:var(--bone)}
+
+  /* the ask */
+  .dark{background:var(--ink);color:var(--bone)}
+  .dark .kicker{color:var(--clay)}
+  .ask-grid{display:grid;gap:3rem;margin-top:0}
+  @media(min-width:768px){.ask-grid{grid-template-columns:1fr 1fr;gap:4rem}}
+  .dark .copy{margin-top:2rem;color:rgb(250 247 242 / .75);line-height:1.65}
+  .dark .copy p+p{margin-top:1rem}
+  .ask-list{list-style:none}
+  .ask-list li{display:flex;align-items:baseline;gap:1.25rem;padding:1.25rem 0;border-bottom:1px solid rgb(250 247 242 / .1)}
+  .ask-list .num{font-family:"Fraunces",serif;font-style:italic;font-size:.875rem;color:var(--clay)}
+  .ask-list .item{font-family:"Fraunces",serif;font-size:clamp(1.25rem,3vw,1.5rem)}
+
+  /* closing */
+  .closing{text-align:center}
+  .closing h2{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(1.875rem,5vw,3rem);line-height:1.2;max-width:42rem;margin:0 auto}
+  .closing h2 em{display:block;color:var(--clay-deep);margin-top:.5rem}
+  .closing .lede{margin:1.5rem auto 0;text-align:center}
+  .closing .actions{margin-top:2.25rem;display:flex;flex-direction:column;gap:1rem;align-items:center;justify-content:center}
+  @media(min-width:640px){.closing .actions{flex-direction:row}}
+
+  /* footer */
+  footer.site{border-top:1px solid var(--line);background:var(--cream);padding:3.5rem 0}
+  .foot-grid{display:grid;gap:2.5rem}
+  @media(min-width:768px){.foot-grid{grid-template-columns:repeat(3,1fr)}}
+  .foot-grid .desc{margin-top:.75rem;max-width:20rem;font-size:.875rem;line-height:1.6;color:var(--ink-soft)}
+  .foot-label{font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.15em;color:var(--mute)}
+  .foot-links{list-style:none;margin-top:1rem}
+  .foot-links li{margin-bottom:.65rem}
+  .foot-links a{font-size:.875rem;color:var(--ink-soft)}
+  .foot-links a:hover{color:var(--ink)}
+  .foot-contact{margin-top:1rem;font-size:.875rem;line-height:1.6;color:var(--ink-soft)}
+  .foot-contact a{color:var(--clay-deep);text-decoration:underline;text-underline-offset:2px}
+  .disclaimer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1.5rem;font-size:.75rem;line-height:1.6;color:var(--mute)}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;z-index:50;background:rgb(33 29 24 / .4);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:1rem}
+  .overlay.open{display:flex}
+  .modal{width:100%;max-width:32rem;max-height:90vh;overflow-y:auto;background:var(--bone);border-radius:1rem;padding:2rem;box-shadow:var(--shadow-lift);position:relative}
+  .modal h3{font-family:"Fraunces",serif;font-weight:500;font-size:1.5rem}
+  .modal .mcopy{margin-top:.75rem;font-size:.875rem;line-height:1.65;color:var(--ink-soft)}
+  .modal .close{position:absolute;top:1.1rem;right:1.1rem;background:none;border:none;font-size:1.2rem;color:var(--mute);cursor:pointer;padding:.35rem .6rem;border-radius:999px}
+  .modal .close:hover{background:var(--cream);color:var(--ink)}
+  .modal form{margin-top:1.5rem}
+  .frow{display:grid;gap:1rem;margin-bottom:1rem}
+  @media(min-width:480px){.frow.two{grid-template-columns:1fr 1fr}}
+  .field label{display:block;font-size:.875rem;font-weight:500;color:var(--ink-soft);margin-bottom:.4rem}
+  .field input{width:100%;height:2.75rem;border:1px solid var(--line);border-radius:.5rem;background:rgb(255 255 255 / .6);padding:0 1rem;font-size:.9375rem;font-family:inherit;color:var(--ink)}
+  .field input:focus{outline:none;border-color:var(--clay);box-shadow:0 0 0 1px rgb(180 83 42 / .3)}
+  .modal .btn{width:100%}
+  .modal .fine{margin-top:1rem;text-align:center;font-size:.75rem;color:var(--mute)}
+  .success{display:none;text-align:center;padding:2rem 0}
+  .success .check{font-size:2.25rem;color:var(--moss)}
+  .success h3{margin-top:1rem}
+  .success p{margin-top:.5rem;font-size:.875rem;color:var(--ink-soft);line-height:1.6}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.21,.47,.32,.98),transform .7s cubic-bezier(.21,.47,.32,.98)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+
+<div class="badge">Static design preview</div>
+
+<header class="site">
+  <div class="wrap nav">
+    <a href="#" class="wordmark">Level <em><i>With</i></em> Respect</a>
+    <nav class="links">
+      <a href="#improve">The Issues</a>
+      <a href="#improve">Community Stories</a>
+      <a href="#improve">Journal</a>
+      <a href="#improve">FAQ</a>
+      <button class="btn btn-accent btn-sm js-open">Sign the Petition</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="wrap hero-inner">
+      <div class="reveal">
+        <p class="kicker">9320 W Pico Blvd · Los Angeles</p>
+        <h1>Level With Respect</h1>
+        <p class="sub">A beautiful venue can still be a good neighbor.</p>
+      </div>
+      <div class="lede reveal">
+        <p>LEVEL Venue has brought a striking event space to 9320 W Pico Blvd. Residents are not asking it to disappear.</p>
+        <p>We are asking it to coexist responsibly with the neighborhood around it.</p>
+      </div>
+      <div class="cta-card reveal">
+        <p class="cta-title display">Join Local Residents Seeking Responsible Operation</p>
+        <button class="btn btn-accent btn-xl js-open">Sign the Petition&ensp;→</button>
+        <p class="cta-note">Support practical solutions for outdoor amplified music, alley access, and neighborhood quality of life.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Love -->
+  <section class="band bg-cream">
+    <div class="wrap pad">
+      <div class="reveal">
+        <p class="kicker">What We Love</p>
+        <h2 class="sec">Credit where credit is due.</h2>
+      </div>
+      <div class="grid3">
+        <div class="card reveal">
+          <svg class="glyph" viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.1C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg>
+          <h3>Beautiful Space</h3>
+          <p>A thoughtfully designed venue that contributes positively to Pico Boulevard.</p>
+        </div>
+        <div class="card reveal">
+          <svg class="glyph" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>
+          <h3>Local Investment</h3>
+          <p>Businesses that invest in the neighborhood deserve the opportunity to succeed.</p>
+        </div>
+        <div class="card reveal">
+          <svg class="glyph" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <h3>Community Gathering Place</h3>
+          <p>Events can strengthen local connections and bring people together.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What Needs Improvement -->
+  <section class="band" id="improve">
+    <div class="wrap pad">
+      <div class="reveal">
+        <p class="kicker">What Needs Improvement</p>
+        <h2 class="sec">Four things, none of them unreasonable.</h2>
+      </div>
+      <div class="grid2">
+        <div class="card link reveal">
+          <h3>Outdoor Amplified Music</h3>
+          <p>Residents have reported recurring concerns regarding sound carrying into nearby residential streets. The bass, it turns out, does not respect property lines.</p>
+          <span class="more">See the documentation →</span>
+        </div>
+        <div class="card link reveal">
+          <h3>Alley Access</h3>
+          <p>Event-related vehicles can create challenges for residents accessing garages and parking. Getting home should not require event credentials.</p>
+          <span class="more">See the documentation →</span>
+        </div>
+        <div class="card link reveal">
+          <h3>Commercial Vehicle Congestion</h3>
+          <p>Large service vehicles occasionally impact neighborhood circulation on streets designed for considerably smaller things.</p>
+          <span class="more">See the documentation →</span>
+        </div>
+        <div class="card link reveal">
+          <h3>Community Communication</h3>
+          <p>Residents would like a clearer channel for ongoing dialogue. A phone number that gets answered would be a wonderful start.</p>
+          <span class="more">See the documentation →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Ask -->
+  <section class="band dark">
+    <div class="wrap pad">
+      <div class="ask-grid">
+        <div class="reveal">
+          <p class="kicker">The Ask</p>
+          <h2 class="sec">What Residents Are Asking For</h2>
+          <div class="copy">
+            <p>None of these requests prevent the venue from succeeding.</p>
+            <p>They simply help ensure success does not come at the expense of neighboring residents.</p>
+          </div>
+        </div>
+        <ul class="ask-list reveal">
+          <li><span class="num">01</span><span class="item">Responsible sound management</span></li>
+          <li><span class="num">02</span><span class="item">Respect for residential quiet hours</span></li>
+          <li><span class="num">03</span><span class="item">Reliable alley access</span></li>
+          <li><span class="num">04</span><span class="item">Better communication</span></li>
+          <li><span class="num">05</span><span class="item">Ongoing community engagement</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="band bg-cream closing">
+    <div class="wrap pad reveal">
+      <h2>We want LEVEL to succeed. <em>Respectfully.</em></h2>
+      <p class="lede">Successful businesses can also be good neighbors. Add your name and help us make the case — constructively.</p>
+      <div class="actions">
+        <button class="btn btn-accent btn-lg js-open">Sign the Petition&ensp;→</button>
+        <a href="#" class="btn btn-outline btn-lg">Read Community Stories</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p class="wordmark">Level <em><i>With</i></em> Respect</p>
+        <p class="desc">A resident-led initiative for responsible operation and good neighborhood relations near LEVEL Venue, 9320 W Pico Blvd, Los Angeles, CA 90035.</p>
+      </div>
+      <nav>
+        <p class="foot-label">Explore</p>
+        <ul class="foot-links">
+          <li><a href="#">The Issues</a></li>
+          <li><a href="#">Community Stories</a></li>
+          <li><a href="#">Journal</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </nav>
+      <div>
+        <p class="foot-label">Contact</p>
+        <p class="foot-contact">Residents, neighbors, and local businesses: <a href="mailto:hello@levelwithrespect.com">hello@levelwithrespect.com</a></p>
+      </div>
+    </div>
+    <div class="disclaimer">
+      <p>Level With Respect is an independent resident advocacy website and is not affiliated with, endorsed by, or sponsored by LEVEL Venue.</p>
+      <p style="margin-top:.5rem">© 2026 Level With Respect. All views expressed reflect resident experiences and opinions.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Petition modal -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <button class="close js-close" aria-label="Close">✕</button>
+    <div id="modal-form">
+      <h3 id="modal-title">Add Your Name</h3>
+      <p class="mcopy">We are currently gathering support from residents, property owners, and local businesses affected by recurring neighborhood impacts associated with events at LEVEL Venue.</p>
+      <p class="mcopy">The full petition will launch shortly. Leave your email below to be notified when signatures officially open.</p>
+      <form id="petition">
+        <div class="frow two">
+          <div class="field"><label for="fn">First Name</label><input id="fn" required></div>
+          <div class="field"><label for="ln">Last Name</label><input id="ln" required></div>
+        </div>
+        <div class="frow">
+          <div class="field"><label for="em">Email</label><input id="em" type="email" required></div>
+        </div>
+        <div class="frow">
+          <div class="field"><label for="st">Street Name</label><input id="st" placeholder="e.g. Glenville Drive" required></div>
+        </div>
+        <button type="submit" class="btn btn-accent btn-lg">Notify Me</button>
+        <p class="fine">Your information stays with this initiative. No spam, ever. (Preview mode — nothing is saved.)</p>
+      </form>
+    </div>
+    <div class="success" id="modal-success">
+      <div class="check">✓</div>
+      <h3 class="display">You&rsquo;re on the list</h3>
+      <p>Thank you. We will email you the moment signatures officially open.<br><small>(Preview mode — nothing was actually saved.)</small></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const overlay = document.getElementById('overlay');
+  const formWrap = document.getElementById('modal-form');
+  const success = document.getElementById('modal-success');
+  document.querySelectorAll('.js-open').forEach(b => b.addEventListener('click', () => {
+    formWrap.style.display = ''; success.style.display = 'none';
+    overlay.classList.add('open'); document.body.style.overflow = 'hidden';
+  }));
+  function close(){ overlay.classList.remove('open'); document.body.style.overflow = ''; }
+  document.querySelectorAll('.js-close').forEach(b => b.addEventListener('click', close));
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.getElementById('petition').addEventListener('submit', e => {
+    e.preventDefault(); formWrap.style.display = 'none'; success.style.display = 'block';
+  });
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+  }), { rootMargin: '-60px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
