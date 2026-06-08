@@ -94,7 +94,7 @@ export default function HomePage() {
                 Blvd in Pico-Robertson. Residents are not asking it to
                 disappear.
               </p>
-              <p>
+              <p className="font-medium text-ink">
                 We are asking it to coexist responsibly with the neighborhood
                 around it.
               </p>
