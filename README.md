@@ -78,3 +78,5 @@ no consent banner needed).
   names of private individuals, or claims you cannot attribute to resident
   experience.
 - No LEVEL Venue logos, photography, or branding anywhere on the site.
+
+<!-- deploy trigger: email alerts -->
