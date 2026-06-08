@@ -127,13 +127,28 @@ export default function HomePage() {
             </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <Button variant="outline" size="md" asChild>
+              <Button
+                variant="outline"
+                size="md"
+                className="border-sand bg-sand hover:bg-[#ded5c2] hover:border-[#ded5c2]"
+                asChild
+              >
                 <Link href="/issues">See the Issues</Link>
               </Button>
-              <Button variant="outline" size="md" asChild>
+              <Button
+                variant="outline"
+                size="md"
+                className="border-sand bg-sand hover:bg-[#ded5c2] hover:border-[#ded5c2]"
+                asChild
+              >
                 <Link href="/stories#share">Share Your Story</Link>
               </Button>
-              <Button variant="ghost" size="md" asChild>
+              <Button
+                variant="outline"
+                size="md"
+                className="border-sand bg-sand hover:bg-[#ded5c2] hover:border-[#ded5c2]"
+                asChild
+              >
                 <Link href="/stories">Read Community Stories</Link>
               </Button>
             </div>
