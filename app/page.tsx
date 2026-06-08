@@ -125,6 +125,18 @@ export default function HomePage() {
                 access, and neighborhood quality of life.
               </p>
             </div>
+
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <Button variant="outline" size="md" asChild>
+                <Link href="/issues">See the Issues</Link>
+              </Button>
+              <Button variant="outline" size="md" asChild>
+                <Link href="/stories#share">Share Your Story</Link>
+              </Button>
+              <Button variant="ghost" size="md" asChild>
+                <Link href="/stories">Read Community Stories</Link>
+              </Button>
+            </div>
           </Reveal>
         </div>
       </section>
